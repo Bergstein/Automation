@@ -1,0 +1,24 @@
+#!/bin/sh
+
+wd=`pwd`
+
+ccred=$(echo "\033[0;33m")
+ccend=$(echo "\033[0m")
+FROM="$1"
+TO="$2"
+echo "From: $FROM"
+echo "To: $TO"
+
+find ~/ -type d -name ".git" | while read LINE;
+do
+    # echo "Found .git folder at $ccred $LINE $ccend"
+    Repo=`realpath "$LINE"`
+    cd "$Repo"
+    ORIGINAL=`git remote get-url origin`
+    echo "Original: $ORIGINAL"
+    REPLACED=`echo $ORIGINAL | sed "s/$FROM/$TO/g"`
+    echo "Replaced: $REPLACED"
+    git remote set-url origin $REPLACED
+done
+
+cd $wd

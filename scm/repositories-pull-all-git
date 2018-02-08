@@ -1,0 +1,20 @@
+#!/bin/sh
+
+wd=`pwd`
+
+ccred=$(echo "\033[0;33m")
+ccend=$(echo "\033[0m")
+
+find ~/ -type d -name ".git" | while read LINE;
+do
+    echo "Found .git folder at $ccred $LINE $ccend"
+    Repo=`realpath "$LINE"`
+    cd "$Repo"
+    cd ..
+    git pull
+    git submodule foreach git pull
+    git prune
+    git gc
+done
+
+cd $wd

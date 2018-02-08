@@ -1,0 +1,27 @@
+#!/bin/sh
+
+wd=`pwd`
+
+ccred=$(echo "\033[0;33m")
+ccend=$(echo "\033[0m")
+FROM="$1"
+TO="$2"
+echo "From: $FROM"
+echo "To: $TO"
+
+find ~/ -type f -name ".gitmodules" | while read LINE;
+do
+    # echo "Found .git folder at $ccred $LINE $ccend"
+    Repo=`dirname "$LINE"`
+    cd "$Repo"
+    grep -q $FROM .gitmodules
+    if [ $? -eq 0 ]
+    then
+        sed "s/$FROM/$TO/g" .gitmodules > .gitmodules-fixed
+        mv -f .gitmodules-fixed .gitmodules
+        git commit .gitmodules -m "gitmodules fix"
+        git push
+    fi
+done
+
+cd $wd

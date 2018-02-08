@@ -1,0 +1,17 @@
+#!/bin/sh
+
+wd=`pwd`
+
+ccred=$(echo "\033[0;33m")
+ccend=$(echo "\033[0m")
+
+find ~/ -type d -name ".hg" | while read LINE;
+do
+    echo "Found .hg folder at $ccred $LINE $ccend"
+    Repo=`realpath "$LINE"`
+    cd "$Repo"
+    cd ..
+    hg pull
+done
+
+cd $wd

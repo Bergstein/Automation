@@ -1,0 +1,13 @@
+#!/bin/bash
+
+ccred=$(echo -e "\033[0;31m")
+ccend=$(echo -e "\033[0m")
+
+for param in `ls -d */` ; do
+  cd $param
+  echo $ccred
+  echo "$param"
+  echo $ccend
+  git push
+  cd ..
+done

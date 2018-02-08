@@ -1,0 +1,22 @@
+#!/bin/sh
+
+wd=`pwd`
+
+ccred=$(echo "\033[0;33m")
+ccend=$(echo "\033[0m")
+
+cd ~
+for f in `ls -1d */`; do
+    echo "Scanning $f"
+    find ~/$f -type f -name "composer.json" | while read LINE;
+    do
+        echo "Found composer.json file at $ccred $LINE $ccend"
+        Repo=`dirname "$LINE"`
+        cd "$Repo"
+        if [ -f ".composer-auto-update" ]; then
+            COMPOSER_DISABLE_XDEBUG_WARN=1 composer update --no-dev
+        fi
+    done
+done
+
+cd $wd

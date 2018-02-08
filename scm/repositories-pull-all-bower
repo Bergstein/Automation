@@ -1,0 +1,23 @@
+#!/bin/sh
+
+wd=`pwd`
+
+ccred=$(echo "\033[0;33m")
+ccend=$(echo "\033[0m")
+
+cd ~
+for f in `ls -1d */`; do
+    echo "Scanning $f"
+    find ~/$f -type f -name "bower.json" | while read LINE;
+    do    
+        echo "Found bower.json file at $ccred $LINE $ccend"
+        Repo=`dirname "$LINE"`
+        cd "$Repo"
+        if [ -f ".bower-auto-update" ]; then
+            echo "Found bower-auto-update file at $ccred $Repo $ccend"
+            bower update --production
+        fi
+    done
+done
+
+cd $wd

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+wd=`pwd`
+cd `dirname "$0"`
+
+ccred=$(echo "\033[0;33m")
+ccend=$(echo "\033[0m")
+
+repositories-pull-all-git
+repositories-pull-all-hg
+repositories-pull-all-bower
+repositories-pull-all-composer
+
+cd $wd
